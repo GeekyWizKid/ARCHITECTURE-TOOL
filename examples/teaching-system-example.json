@@ -1,0 +1,443 @@
+{
+  "version": "1.0.0",
+  "data": {
+    "project": {
+      "id": "teaching_system_example_2024",
+      "name": "在线教学管理系统",
+      "description": "一个完整的在线教学管理系统示例，展示概念设计和UML设计的层次区别",
+      "version": "1.0.0",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z",
+      "author": "架构工具示例",
+      "tags": ["教学系统", "示例项目", "DDD", "UML"],
+      "editMode": "concept"
+    },
+    "boundedContexts": [
+      {
+        "id": "bc_user_management",
+        "name": "用户管理上下文",
+        "description": "管理学生、教师、管理员等用户信息和权限",
+        "color": "#3B82F6",
+        "position": { "x": 100, "y": 100 },
+        "size": { "width": 300, "height": 200 }
+      },
+      {
+        "id": "bc_course_management",
+        "name": "课程管理上下文",
+        "description": "管理课程内容、教学计划、课程资源等",
+        "color": "#10B981",
+        "position": { "x": 500, "y": 100 },
+        "size": { "width": 350, "height": 250 }
+      },
+      {
+        "id": "bc_learning_activity",
+        "name": "学习活动上下文",
+        "description": "处理学习过程、作业提交、考试评估等活动",
+        "color": "#F59E0B",
+        "position": { "x": 300, "y": 400 },
+        "size": { "width": 400, "height": 300 }
+      }
+    ],
+    "concepts": [
+      {
+        "id": "class_user",
+        "name": "User",
+        "type": "entity",
+        "position": { "x": 150, "y": 150 },
+        "boundedContextId": "bc_user_management",
+        "description": "系统用户基类",
+        "properties": ["id: String", "username: String", "email: String", "password: String", "createdAt: Date"],
+        "methods": ["authenticate()", "updateProfile()", "resetPassword()"]
+      },
+      {
+        "id": "class_student",
+        "name": "Student",
+        "type": "entity",
+        "position": { "x": 80, "y": 250 },
+        "boundedContextId": "bc_user_management",
+        "description": "学生实体",
+        "properties": ["studentId: String", "grade: String", "enrollmentDate: Date"],
+        "methods": ["enrollCourse()", "submitAssignment()", "viewGrades()"]
+      },
+      {
+        "id": "class_teacher",
+        "name": "Teacher",
+        "type": "entity",
+        "position": { "x": 220, "y": 250 },
+        "boundedContextId": "bc_user_management",
+        "description": "教师实体",
+        "properties": ["teacherId: String", "department: String", "title: String"],
+        "methods": ["createCourse()", "gradeAssignment()", "publishNotice()"]
+      },
+      {
+        "id": "class_course",
+        "name": "Course",
+        "type": "aggregate_root",
+        "position": { "x": 550, "y": 150 },
+        "boundedContextId": "bc_course_management",
+        "description": "课程聚合根",
+        "properties": ["id: String", "name: String", "description: String", "teacherId: String", "capacity: Integer"],
+        "methods": ["addStudent()", "removeStudent()", "updateContent()", "getEnrollments()"]
+      },
+      {
+        "id": "class_lesson",
+        "name": "Lesson",
+        "type": "entity",
+        "position": { "x": 700, "y": 250 },
+        "boundedContextId": "bc_course_management",
+        "description": "课程章节实体",
+        "properties": ["id: String", "title: String", "content: String", "order: Integer", "duration: Integer"],
+        "methods": ["updateContent()", "addResource()", "markComplete()"]
+      },
+      {
+        "id": "class_assignment",
+        "name": "Assignment",
+        "type": "entity",
+        "position": { "x": 350, "y": 450 },
+        "boundedContextId": "bc_learning_activity",
+        "description": "作业实体",
+        "properties": ["id: String", "title: String", "description: String", "dueDate: Date", "maxScore: Integer"],
+        "methods": ["submit()", "grade()", "provideFeedback()"]
+      },
+      {
+        "id": "class_submission",
+        "name": "Submission",
+        "type": "entity",
+        "position": { "x": 500, "y": 550 },
+        "boundedContextId": "bc_learning_activity",
+        "description": "作业提交实体",
+        "properties": ["id: String", "studentId: String", "content: String", "submittedAt: Date", "score: Integer"],
+        "methods": ["validate()", "calculateScore()", "generateReport()"]
+      },
+      {
+        "id": "class_enrollment",
+        "name": "Enrollment",
+        "type": "entity",
+        "position": { "x": 350, "y": 300 },
+        "boundedContextId": "bc_course_management",
+        "description": "选课记录实体",
+        "properties": ["id: String", "studentId: String", "courseId: String", "enrolledAt: Date", "status: String"],
+        "methods": ["activate()", "suspend()", "complete()", "getProgress()"]
+      }
+    ],
+    "relationships": [
+      {
+        "id": "uml_user_student",
+        "sourceId": "class_user",
+        "targetId": "class_student",
+        "type": "generalization",
+        "label": "继承"
+      },
+      {
+        "id": "uml_user_teacher",
+        "sourceId": "class_user",
+        "targetId": "class_teacher",
+        "type": "generalization",
+        "label": "继承"
+      },
+      {
+        "id": "uml_teacher_course",
+        "sourceId": "class_teacher",
+        "targetId": "class_course",
+        "type": "association",
+        "label": "教授",
+        "multiplicity": { "source": "1", "target": "*" }
+      },
+      {
+        "id": "uml_course_lesson",
+        "sourceId": "class_course",
+        "targetId": "class_lesson",
+        "type": "aggregation",
+        "label": "包含",
+        "multiplicity": { "source": "1", "target": "*" }
+      },
+      {
+        "id": "uml_student_enrollment",
+        "sourceId": "class_student",
+        "targetId": "class_enrollment",
+        "type": "association",
+        "label": "选课",
+        "multiplicity": { "source": "1", "target": "*" }
+      },
+      {
+        "id": "uml_course_enrollment",
+        "sourceId": "class_course",
+        "targetId": "class_enrollment",
+        "type": "association",
+        "label": "注册",
+        "multiplicity": { "source": "1", "target": "*" }
+      },
+      {
+        "id": "uml_course_assignment",
+        "sourceId": "class_course",
+        "targetId": "class_assignment",
+        "type": "aggregation",
+        "label": "发布",
+        "multiplicity": { "source": "1", "target": "*" }
+      },
+      {
+        "id": "uml_assignment_submission",
+        "sourceId": "class_assignment",
+        "targetId": "class_submission",
+        "type": "aggregation",
+        "label": "收集",
+        "multiplicity": { "source": "1", "target": "*" }
+      },
+      {
+        "id": "uml_student_submission",
+        "sourceId": "class_student",
+        "targetId": "class_submission",
+        "type": "association",
+        "label": "提交",
+        "multiplicity": { "source": "1", "target": "*" }
+      }
+    ],
+    "conceptDesign": {
+      "concepts": [
+        {
+          "id": "concept_learning_community",
+          "name": "学习共同体",
+          "type": "aggregate_root",
+          "position": { "x": 150, "y": 150 },
+          "boundedContextId": "bc_user_management",
+          "description": "由教师和学生组成的学习社区，共同参与教学活动",
+          "properties": ["社区规模", "学习目标", "互动频率"]
+        },
+        {
+          "id": "concept_knowledge_domain",
+          "name": "知识领域",
+          "type": "aggregate_root",
+          "position": { "x": 600, "y": 150 },
+          "boundedContextId": "bc_course_management",
+          "description": "特定学科的知识体系和学习内容",
+          "properties": ["学科分类", "难度等级", "前置知识"]
+        },
+        {
+          "id": "concept_learning_journey",
+          "name": "学习旅程",
+          "type": "aggregate_root",
+          "position": { "x": 500, "y": 450 },
+          "boundedContextId": "bc_learning_activity",
+          "description": "学生在特定知识领域的完整学习过程",
+          "properties": ["学习路径", "进度追踪", "成果评估"]
+        },
+        {
+          "id": "concept_teaching_strategy",
+          "name": "教学策略",
+          "type": "domain_service",
+          "position": { "x": 650, "y": 250 },
+          "boundedContextId": "bc_course_management",
+          "description": "教师采用的教学方法和策略",
+          "properties": ["教学模式", "互动方式", "评估方法"]
+        },
+        {
+          "id": "concept_learning_outcome",
+          "name": "学习成果",
+          "type": "value_object",
+          "position": { "x": 400, "y": 550 },
+          "boundedContextId": "bc_learning_activity",
+          "description": "学习过程产生的知识、技能和能力",
+          "properties": ["能力等级", "知识掌握度", "应用能力"]
+        }
+      ],
+      "relationships": [
+        {
+          "id": "rel_community_knowledge",
+          "sourceId": "concept_learning_community",
+          "targetId": "concept_knowledge_domain",
+          "type": "association",
+          "label": "探索学习"
+        },
+        {
+          "id": "rel_knowledge_strategy",
+          "sourceId": "concept_knowledge_domain",
+          "targetId": "concept_teaching_strategy",
+          "type": "domain_service",
+          "label": "指导设计"
+        },
+        {
+          "id": "rel_strategy_journey",
+          "sourceId": "concept_teaching_strategy",
+          "targetId": "concept_learning_journey",
+          "type": "dependency",
+          "label": "规划路径"
+        },
+        {
+          "id": "rel_journey_outcome",
+          "sourceId": "concept_learning_journey",
+          "targetId": "concept_learning_outcome",
+          "type": "value_object",
+          "label": "产生成果"
+        },
+        {
+          "id": "rel_community_journey",
+          "sourceId": "concept_learning_community",
+          "targetId": "concept_learning_journey",
+          "type": "usage",
+          "label": "共同参与"
+        }
+      ]
+    },
+    "umlDesign": {
+      "concepts": [
+        {
+          "id": "class_user",
+          "name": "User",
+          "type": "entity",
+          "position": { "x": 150, "y": 150 },
+          "boundedContextId": "bc_user_management",
+          "description": "系统用户基类",
+          "properties": ["id: String", "username: String", "email: String", "password: String", "createdAt: Date"],
+          "methods": ["authenticate()", "updateProfile()", "resetPassword()"]
+        },
+        {
+          "id": "class_student",
+          "name": "Student",
+          "type": "entity",
+          "position": { "x": 80, "y": 250 },
+          "boundedContextId": "bc_user_management",
+          "description": "学生实体",
+          "properties": ["studentId: String", "grade: String", "enrollmentDate: Date"],
+          "methods": ["enrollCourse()", "submitAssignment()", "viewGrades()"]
+        },
+        {
+          "id": "class_teacher",
+          "name": "Teacher",
+          "type": "entity",
+          "position": { "x": 220, "y": 250 },
+          "boundedContextId": "bc_user_management",
+          "description": "教师实体",
+          "properties": ["teacherId: String", "department: String", "title: String"],
+          "methods": ["createCourse()", "gradeAssignment()", "publishNotice()"]
+        },
+        {
+          "id": "class_course",
+          "name": "Course",
+          "type": "aggregate_root",
+          "position": { "x": 550, "y": 150 },
+          "boundedContextId": "bc_course_management",
+          "description": "课程聚合根",
+          "properties": ["id: String", "name: String", "description: String", "teacherId: String", "capacity: Integer"],
+          "methods": ["addStudent()", "removeStudent()", "updateContent()", "getEnrollments()"]
+        },
+        {
+          "id": "class_lesson",
+          "name": "Lesson",
+          "type": "entity",
+          "position": { "x": 700, "y": 250 },
+          "boundedContextId": "bc_course_management",
+          "description": "课程章节实体",
+          "properties": ["id: String", "title: String", "content: String", "order: Integer", "duration: Integer"],
+          "methods": ["updateContent()", "addResource()", "markComplete()"]
+        },
+        {
+          "id": "class_assignment",
+          "name": "Assignment",
+          "type": "entity",
+          "position": { "x": 350, "y": 450 },
+          "boundedContextId": "bc_learning_activity",
+          "description": "作业实体",
+          "properties": ["id: String", "title: String", "description: String", "dueDate: Date", "maxScore: Integer"],
+          "methods": ["submit()", "grade()", "provideFeedback()"]
+        },
+        {
+          "id": "class_submission",
+          "name": "Submission",
+          "type": "entity",
+          "position": { "x": 500, "y": 550 },
+          "boundedContextId": "bc_learning_activity",
+          "description": "作业提交实体",
+          "properties": ["id: String", "studentId: String", "content: String", "submittedAt: Date", "score: Integer"],
+          "methods": ["validate()", "calculateScore()", "generateReport()"]
+        },
+        {
+          "id": "class_enrollment",
+          "name": "Enrollment",
+          "type": "entity",
+          "position": { "x": 350, "y": 300 },
+          "boundedContextId": "bc_course_management",
+          "description": "选课记录实体",
+          "properties": ["id: String", "studentId: String", "courseId: String", "enrolledAt: Date", "status: String"],
+          "methods": ["activate()", "suspend()", "complete()", "getProgress()"]
+        }
+      ],
+      "relationships": [
+        {
+          "id": "uml_user_student",
+          "sourceId": "class_user",
+          "targetId": "class_student",
+          "type": "generalization",
+          "label": "继承"
+        },
+        {
+          "id": "uml_user_teacher",
+          "sourceId": "class_user",
+          "targetId": "class_teacher",
+          "type": "generalization",
+          "label": "继承"
+        },
+        {
+          "id": "uml_teacher_course",
+          "sourceId": "class_teacher",
+          "targetId": "class_course",
+          "type": "association",
+          "label": "教授",
+          "multiplicity": { "source": "1", "target": "*" }
+        },
+        {
+          "id": "uml_course_lesson",
+          "sourceId": "class_course",
+          "targetId": "class_lesson",
+          "type": "aggregation",
+          "label": "包含",
+          "multiplicity": { "source": "1", "target": "*" }
+        },
+        {
+          "id": "uml_student_enrollment",
+          "sourceId": "class_student",
+          "targetId": "class_enrollment",
+          "type": "association",
+          "label": "选课",
+          "multiplicity": { "source": "1", "target": "*" }
+        },
+        {
+          "id": "uml_course_enrollment",
+          "sourceId": "class_course",
+          "targetId": "class_enrollment",
+          "type": "association",
+          "label": "注册",
+          "multiplicity": { "source": "1", "target": "*" }
+        },
+        {
+          "id": "uml_course_assignment",
+          "sourceId": "class_course",
+          "targetId": "class_assignment",
+          "type": "aggregation",
+          "label": "发布",
+          "multiplicity": { "source": "1", "target": "*" }
+        },
+        {
+          "id": "uml_assignment_submission",
+          "sourceId": "class_assignment",
+          "targetId": "class_submission",
+          "type": "aggregation",
+          "label": "收集",
+          "multiplicity": { "source": "1", "target": "*" }
+        },
+        {
+          "id": "uml_student_submission",
+          "sourceId": "class_student",
+          "targetId": "class_submission",
+          "type": "association",
+          "label": "提交",
+          "multiplicity": { "source": "1", "target": "*" }
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "exportedAt": "2024-01-01T00:00:00.000Z",
+    "exportedBy": "架构工具示例生成器",
+    "toolVersion": "1.0.0"
+  }
+} 

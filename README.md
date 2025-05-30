@@ -1,46 +1,156 @@
-# Getting Started with Create React App
+# DDD架构概念梳理工具
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+基于领域驱动设计(DDD)原则的架构概念可视化梳理工具，支持多种编辑模式，帮助架构师识别和组织系统中的概念及其关系。
 
-## Available Scripts
+## 🚀 主要功能
 
-In the project directory, you can run:
+### 📁 项目管理
+- **项目创建与管理**：支持创建、加载、保存、删除项目
+- **导入导出**：支持JSON格式的项目文件导入导出
+- **自动保存**：实时保存项目变更，避免数据丢失
 
-### `npm start`
+### 🏗 三层编辑架构
+1. **项目管理层**：管理所有项目，项目选择和创建
+2. **项目编辑层**：管理边界上下文（Bounded Context）
+3. **上下文编辑层**：管理具体的DDD概念和关系
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 🎨 双编辑模式
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### 1. UML模式 📊
+- **完整的UML类图支持**
+- **DDD概念类型**：
+  - 聚合根 (Aggregate Root)
+  - 实体 (Entity) 
+  - 值对象 (Value Object)
+  - 领域服务 (Domain Service)
+  - 应用服务 (Application Service)
+  - 仓储 (Repository)
+  - 工厂 (Factory)
+- **详细的属性和方法定义**
+- **丰富的关系类型**：关联、聚合、组合、依赖等
+- **UML标准表示**：三段式类图，包含属性和方法
 
-### `npm test`
+#### 2. 概念设计模式 🎯
+- **早期概念设计专用**
+- **简化的概念表示**：专注于概念名称和描述
+- **双色关系系统**：
+  - 🔴 **依赖关系**：红色虚线箭头
+  - 🟢 **协作关系**：绿色实线箭头
+- **游离态概念识别**：黄色高亮显示未建立关系的概念
+- **两步式概念连接**：直观的点击连接操作
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🔧 交互功能
 
-### `npm run build`
+#### 通用功能
+- **拖拽移动**：所有元素支持拖拽定位
+- **右键编辑**：快速编辑概念和上下文属性
+- **智能布局**：自动优化元素位置
+- **实时预览**：即时反馈设计变更
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### 概念设计模式特色
+- **连接模式**：一键开启概念连接模式
+- **关系类型选择**：快速切换依赖/协作关系
+- **游离态提醒**：自动识别孤立概念，确保设计完整性
+- **视觉化指导**：清晰的连接状态指示
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠 技术栈
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **前端框架**：React 18 + TypeScript
+- **状态管理**：React Hooks
+- **拖拽功能**：react-dnd
+- **样式框架**：Tailwind CSS
+- **图形渲染**：SVG
+- **数据存储**：localStorage
 
-### `npm run eject`
+## 📖 使用指南
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### 基本操作流程
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **项目管理**
+   ```
+   启动应用 → 创建/选择项目 → 设置编辑模式
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+2. **边界上下文设计**
+   ```
+   添加边界上下文 → 定义名称和描述 → 选择代表颜色
+   ```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+3. **概念建模**
+   ```
+   进入上下文 → 添加概念 → 建立关系 → 完善设计
+   ```
 
-## Learn More
+### 编辑模式切换
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**工具栏模式切换器**
+- 点击工具栏中的模式切换按钮
+- 选择"UML模式"或"概念设计"
+- 系统自动调整界面和功能
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 概念设计模式操作
+
+1. **添加概念**：
+   - 点击"添加概念"按钮
+   - 输入概念名称和描述
+   - 概念将出现在画布上
+
+2. **建立关系**：
+   - 选择关系类型（依赖/协作）
+   - 点击"连接概念"按钮
+   - 依次点击源概念和目标概念
+
+3. **识别游离态**：
+   - 系统自动高亮显示未连接的概念
+   - 黄色边框表示需要建立关系的概念
+
+## 🎯 设计理念
+
+### 概念设计模式的价值
+
+**早期架构探索**
+- 专注于概念识别，不被实现细节干扰
+- 快速建立概念间的依赖和协作关系
+- 通过游离态识别确保概念完整性
+
+**渐进式设计**
+- 从简单的概念关系开始
+- 逐步细化到详细的UML模型
+- 支持设计过程的不同阶段
+
+**团队协作**
+- 简化的表示方式便于非技术人员理解
+- 清晰的关系类型减少沟通误解
+- 可视化设计促进团队讨论
+
+## 🚀 开发计划
+
+### 当前版本 (v1.0)
+- ✅ 双编辑模式支持
+- ✅ 基础项目管理
+- ✅ 游离态概念识别
+- ✅ 拖拽式交互
+
+### 下一版本 (v1.1)
+- 🔄 关系标签编辑
+- 🔄 概念搜索和过滤
+- 🔄 批量操作功能
+- 🔄 键盘快捷键
+
+### 未来版本
+- 📋 导出为图片/PDF
+- 📋 模板库和预设
+- 📋 多人实时协作
+- 📋 版本历史管理
+
+## 🐛 问题反馈
+
+如果您在使用过程中遇到问题或有功能建议，请通过以下方式联系：
+
+- 提交Issue到项目仓库
+- 发送邮件描述问题详情
+- 参与社区讨论
+
+---
+
+**让架构设计更简单，让概念关系更清晰！** 🎉
