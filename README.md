@@ -2,6 +2,15 @@
 
 基于领域驱动设计(DDD)原则的架构概念可视化梳理工具，支持多种编辑模式，帮助架构师识别和组织系统中的概念及其关系。
 
+## 界面
+![界面4](./preview/988shots_so.png)
+![界面1](./preview/512shots_so.png)
+![界面2](./preview/660shots_so.png)
+![界面3](./preview/877shots_so.png)
+
+
+
+
 ## 🚀 主要功能
 
 ### 📁 项目管理
